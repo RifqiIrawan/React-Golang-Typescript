@@ -1,0 +1,84 @@
+.dt-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.dt-toolbar {
+    padding: 1rem 1.25rem 0;
+}
+
+.dt-table {
+    margin-bottom: 0;
+}
+
+.dt-table thead th {
+    border: none;
+    background-color: #f8f9fb;
+    color: #6c757d;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.25rem;
+    white-space: nowrap;
+}
+
+.dt-table tbody td {
+    border: none;
+    border-top: 1px solid #f1f2f4;
+    padding: 0.85rem 1.25rem;
+    color: #212529;
+    font-size: 0.9rem;
+}
+
+.dt-table tbody tr:hover td {
+    background-color: #f8f9fb;
+}
+
+.dt-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.dt-footer {
+    padding: 0.9rem 1.25rem;
+    border-top: 1px solid #f1f2f4;
+}
+
+.dt-select {
+    border-radius: 2rem;
+}
+
+.dt-nav-btn {
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #e9ecef;
+    background-color: #fff;
+    color: #495057;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dt-nav-btn:not(:disabled):hover {
+    background-color: #212529;
+    color: #fff;
+    border-color: #212529;
+}
+
+.dt-nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.dt-page-pill {
+    border-radius: 2rem;
+    padding: 0.3rem 0.9rem;
+    background-color: #f8f9fb;
+    color: #495057;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
