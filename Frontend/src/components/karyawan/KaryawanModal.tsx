@@ -3,7 +3,7 @@ type Props = {
     onClose: () => void;
 };
 
-export default function ProdukModal({
+export default function KaryawanModal({
     show,
     onClose,
 }: Props) {
@@ -25,7 +25,7 @@ export default function ProdukModal({
 
                     <div className="modal-header">
 
-                        <h5>Tambah Produk</h5>
+                        <h5>Tambah Karyawan</h5>
 
                         <button
                             className="btn-close"
@@ -35,10 +35,9 @@ export default function ProdukModal({
                     </div>
 
                     <div className="modal-body">
-
                         <div className="mb-3">
 
-                            <label>Nama Produk</label>
+                            <label>NIK</label>
 
                             <input
                                 className="form-control"
@@ -48,7 +47,17 @@ export default function ProdukModal({
 
                         <div className="mb-3">
 
-                            <label>Deskripsi</label>
+                            <label>Nama Karyawan</label>
+
+                            <input
+                                className="form-control"
+                            />
+
+                        </div>
+
+                        <div className="mb-3">
+
+                            <label>Alamat</label>
 
                             <input
                                 type="text"
@@ -59,26 +68,14 @@ export default function ProdukModal({
 
                         <div className="mb-3">
 
-                            <label>Harga</label>
+                            <label>Tanggal Lahir</label>
 
                             <input
-                                type="number"
+                                type="date"
                                 className="form-control"
                             />
 
                         </div>
-
-                        <div className="mb-3">
-
-                            <label>Stock</label>
-
-                            <input
-                                type="number"
-                                className="form-control"
-                            />
-
-                        </div>
-
                     </div>
 
                     <div className="modal-footer">

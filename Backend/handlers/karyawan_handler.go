@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetProduk(c *gin.Context) {
+func GetKaryawan(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil || page < 1 {
 		page = 1
@@ -24,20 +24,12 @@ func GetProduk(c *gin.Context) {
 	}
 
 	search := c.Query("search")
-	role := c.Query("role")
-	status := c.Query("status")
 
 	buildQuery := func() *gorm.DB {
-		q := config.DB.Model(&models.Produk{})
+		q := config.DB.Model(&models.Karyawan{})
 		if search != "" {
 			like := "%" + search + "%"
-			q = q.Where("nama ILIKE ? OR deskripsi ILIKE ?", like, like)
-		}
-		if role != "" {
-			q = q.Where("role = ?", role)
-		}
-		if status != "" {
-			q = q.Where("status = ?", status)
+			q = q.Where("nama ILIKE ? OR alamat ILIKE ?", like, like)
 		}
 		return q
 	}
@@ -48,9 +40,9 @@ func GetProduk(c *gin.Context) {
 		return
 	}
 
-	var produk []models.Produk
+	var karyawan []models.Karyawan
 	offset := (page - 1) * limit
-	if err := buildQuery().Order("id asc").Offset(offset).Limit(limit).Find(&produk).Error; err != nil {
+	if err := buildQuery().Order("id asc").Offset(offset).Limit(limit).Find(&karyawan).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -61,7 +53,7 @@ func GetProduk(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": produk,
+		"data": karyawan,
 		"meta": gin.H{
 			"page":       page,
 			"limit":      limit,
@@ -71,8 +63,8 @@ func GetProduk(c *gin.Context) {
 	})
 }
 
-func CreateProduk(c *gin.Context) {
-	var input models.Produk
+func CreateKaryawan(c *gin.Context) {
+	var input models.Karyawan
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -80,7 +72,7 @@ func CreateProduk(c *gin.Context) {
 
 	if err := config.DB.Create(&input).Error; err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {
-			c.JSON(http.StatusConflict, gin.H{"error": "Email sudah digunakan"})
+			c.JSON(http.StatusConflict, gin.H{"error": "Nik sudah digunakan"})
 			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -90,53 +82,53 @@ func CreateProduk(c *gin.Context) {
 	c.JSON(http.StatusCreated, input)
 }
 
-func UpdateProduk(c *gin.Context) {
+func UpdateKaryawan(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id tidak valid"})
 		return
 	}
 
-	var produk models.Produk
-	if err := config.DB.First(&produk, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "produk tidak ditemukan"})
+	var karyawan models.Karyawan
+	if err := config.DB.First(&karyawan, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "karyawan tidak ditemukan"})
 		return
 	}
 
-	var input models.Produk
+	var input models.Karyawan
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	produk.Nama = input.Nama
-	produk.Deskripsi = input.Deskripsi
-	produk.Harga = input.Harga
-	produk.Stock = input.Stock
+	karyawan.Nik = input.Nik
+	karyawan.Nama = input.Nama
+	karyawan.Alamat = input.Alamat
+	karyawan.TanggalLahir = input.TanggalLahir
 
-	if err := config.DB.Save(&produk).Error; err != nil {
+	if err := config.DB.Save(&karyawan).Error; err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {
-			c.JSON(http.StatusConflict, gin.H{"error": "Produk sudah digunakan"})
+			c.JSON(http.StatusConflict, gin.H{"error": "Karyawan sudah digunakan"})
 			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, produk)
+	c.JSON(http.StatusOK, karyawan)
 }
 
-func DeleteProduk(c *gin.Context) {
+func DeleteKaryawan(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id tidak valid"})
 		return
 	}
 
-	if err := config.DB.Delete(&models.Produk{}, id).Error; err != nil {
+	if err := config.DB.Delete(&models.Karyawan{}, id).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "produk berhasil dihapus"})
+	c.JSON(http.StatusOK, gin.H{"message": "karyawan berhasil dihapus"})
 }
