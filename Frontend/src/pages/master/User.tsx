@@ -1,19 +1,32 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import DataTable from "../../components/table/DataTable";
 import UserFormModal from "../../components/user/UserFormModal";
 import type { User } from "../../types/user";
+import { getUsers, createUser, updateUser, deleteUser } from "../../services/userService";
 
 export default function User(){
 
-    const [data, setData] = useState<User[]>([
-        { id: 1, nama: "Admin", email: "admin@mail.com", role: "Administrator", status: "Aktif" },
-        { id: 2, nama: "Rifqi", email: "rifqi@mail.com", role: "User", status: "Aktif" },
-    ]);
-
+    const [data, setData] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
+
+    const loadUsers = async () => {
+        try {
+            setLoading(true);
+            const users = await getUsers();
+            setData(users);
+        } catch (err) {
+            console.error("Gagal memuat data user:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadUsers();
+    }, []);
 
     const handleAdd = () => {
         setEditingUser(null);
@@ -25,20 +38,28 @@ export default function User(){
         setShowModal(true);
     };
 
-    const handleDelete = (id: number) => {
-        if (confirm("Yakin ingin menghapus data ini?")) {
-            setData(data.filter(u => u.id !== id));
+    const handleDelete = async (id: number) => {
+        if (!confirm("Yakin ingin menghapus data ini?")) return;
+        try {
+            await deleteUser(id);
+            await loadUsers();
+        } catch (err) {
+            console.error("Gagal menghapus user:", err);
         }
     };
 
-    const handleSave = (formData: Omit<User, "id">) => {
-        if (editingUser) {
-            setData(data.map(u => u.id === editingUser.id ? { ...u, ...formData } : u));
-        } else {
-            const newId = data.length ? Math.max(...data.map(u => u.id)) + 1 : 1;
-            setData([...data, { id: newId, ...formData }]);
+    const handleSave = async (formData: Omit<User, "id">) => {
+        try {
+            if (editingUser) {
+                await updateUser(editingUser.id, formData);
+            } else {
+                await createUser(formData);
+            }
+            setShowModal(false);
+            await loadUsers();
+        } catch (err) {
+            console.error("Gagal menyimpan user:", err);
         }
-        setShowModal(false);
     };
 
     const columns: ColumnDef<User>[] = [
@@ -85,6 +106,10 @@ export default function User(){
         }
 
     ];
+
+    if (loading) {
+        return <p>Memuat data...</p>;
+    }
 
     return(
         <>
