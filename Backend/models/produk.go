@@ -5,5 +5,9 @@ type Produk struct {
 	Nama      string  `json:"nama"`
 	Deskripsi string  `json:"deskripsi"`
 	Harga     float64 `json:"harga"`
-	Stok      int     `json:"stok"`
+	Stock     int     `json:"stock"`
+}
+
+func (Produk) TableName() string {
+	return "produk"
 }

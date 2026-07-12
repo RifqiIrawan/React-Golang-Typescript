@@ -5,8 +5,8 @@ import DataTable from "../../components/table/DataTable";
 import type { Produk } from "../../types/produk";
 import { getProduk, createProduk, updateProduk, deleteProduk, getErrorMessage } from "../../services/produkService";
 
-// const escapeHtml = (str: string) =>
-    // str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"": "&quot;", "'": "&#39;" }[c] as string));
+const escapeHtml = (str: string) =>
+    str.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
 
 export default function Produk(){
 
@@ -20,8 +20,6 @@ export default function Produk(){
 
     const [searchInput, setSearchInput] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [filterRole, setFilterRole] = useState("");
-    const [filterStatus, setFilterStatus] = useState("");
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -38,14 +36,12 @@ export default function Produk(){
             const res = await getProduk({
                 page,
                 limit,
-                search: searchTerm || undefined,
-                role: filterRole || undefined,
-                status: filterStatus || undefined,
+                search: searchTerm || undefined,                
             });
             setData(res.data);
             setMeta({ total: res.meta.total, totalPages: res.meta.totalPages });
         } catch (err) {
-            console.error("Gagal memuat data user:", err);
+            console.error("Gagal memuat data produk:", err);
             setError(getErrorMessage(err));
         } finally {
             setLoading(false);
@@ -54,7 +50,7 @@ export default function Produk(){
 
     useEffect(() => {
         loadProduk();
-    }, [page, limit, searchTerm, filterRole, filterStatus]);
+    }, [page, limit, searchTerm]);
 
     const handleRoleChange = (value: string) => {
         setFilterRole(value);
@@ -73,11 +69,11 @@ export default function Produk(){
                 <div class="text-start">
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
-                        <input id="swal-nama" class="form-control" value="${escapeHtml(initialData?.nama ?? "0")}">
+                        <input id="swal-nama" class="form-control" value="${escapeHtml(initialData?.nama ?? "")}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
-                        <input id="swal-deskripsi" class="form-control" value="${escapeHtml(initialData?.deskripsi ?? "0")}">
+                        <input id="swal-deskripsi" class="form-control" value="${escapeHtml(initialData?.deskripsi ?? "")}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Harga</label>
@@ -168,18 +164,18 @@ export default function Produk(){
         },
 
         {
-            accessorKey: "email",
-            header: "Email"
+            accessorKey: "deskripsi",
+            header: "Deskripsi"
         },
 
         {
-            accessorKey: "role",
-            header: "Role"
+            accessorKey: "harga",
+            header: "Harga"
         },
 
         {
-            accessorKey: "status",
-            header: "Status"
+            accessorKey: "stock",
+            header: "Stock"
         },
 
         {
@@ -223,25 +219,6 @@ export default function Produk(){
                         onChange={e => setSearchInput(e.target.value)}
                     />
 
-                    <select
-                        className="form-select form-select-sm w-auto"
-                        value={filterRole}
-                        onChange={e => handleRoleChange(e.target.value)}
-                    >
-                        <option value="">Semua Role</option>
-                        <option value="Administrator">Administrator</option>
-                        <option value="User">User</option>
-                    </select>
-
-                    <select
-                        className="form-select form-select-sm w-auto"
-                        value={filterStatus}
-                        onChange={e => handleStatusChange(e.target.value)}
-                    >
-                        <option value="">Semua Status</option>
-                        <option value="Aktif">Aktif</option>
-                        <option value="Nonaktif">Nonaktif</option>
-                    </select>
                 </div>
 
                 <button className="btn btn-primary" onClick={() => openProdukForm()}>
