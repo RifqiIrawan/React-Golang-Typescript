@@ -20,10 +20,10 @@ func main() {
 
 	config.ConnectDatabase()
 
-	if err := config.DB.AutoMigrate(&models.User{}); err != nil {
+	if err := config.DB.AutoMigrate(models.AllModels...); err != nil {
 		log.Fatal("Gagal migrate: ", err)
 	}
-	log.Println("Migrasi berhasil, tabel users siap")
+	log.Println("Migrasi berhasil, semua tabel siap")
 
 	r := gin.Default()
 

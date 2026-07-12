@@ -13,7 +13,7 @@ export default function Sidebar() {
 
             <div className="sidebar-title">
 
-                React ERP
+                React JS
 
             </div>
 
@@ -26,7 +26,7 @@ export default function Sidebar() {
                         end
                         className={({isActive})=>isActive?"nav-link active":"nav-link"}>
 
-                        <i className="bi bi-speedometer2 me-2"></i>
+                        <i className="bi bi-speedometer2 me-2   "></i>
 
                         Dashboard
 

@@ -1,7 +1,8 @@
 .dt-card {
-    border: none;
+    border: 1px solid var(--app-border, #ececf4);
+    border-top: 3px solid var(--app-action, #2f3b4c);
     border-radius: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
     overflow: hidden;
 }
 
@@ -15,8 +16,8 @@
 
 .dt-table thead th {
     border: none;
-    background-color: #f8f9fb;
-    color: #6c757d;
+    background-color: var(--app-bg, #f6f7fb);
+    color: var(--app-text-muted, #8b8fa8);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -27,14 +28,14 @@
 
 .dt-table tbody td {
     border: none;
-    border-top: 1px solid #f1f2f4;
+    border-top: 1px solid var(--app-border, #ececf4);
     padding: 0.85rem 1.25rem;
-    color: #212529;
+    color: var(--app-text, #32354a);
     font-size: 0.9rem;
 }
 
 .dt-table tbody tr:hover td {
-    background-color: #f8f9fb;
+    background-color: var(--app-action-soft, rgba(47, 59, 76, 0.06));
 }
 
 .dt-table tbody tr:last-child td {
@@ -43,7 +44,7 @@
 
 .dt-footer {
     padding: 0.9rem 1.25rem;
-    border-top: 1px solid #f1f2f4;
+    border-top: 1px solid var(--app-border, #ececf4);
 }
 
 .dt-select {
@@ -57,16 +58,16 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--app-border, #ececf4);
     background-color: #fff;
-    color: #495057;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    color: var(--app-text-muted, #8b8fa8);
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .dt-nav-btn:not(:disabled):hover {
-    background-color: #212529;
+    background: linear-gradient(135deg, var(--app-action, #2f3b4c), var(--app-action-dark, #1c2430));
     color: #fff;
-    border-color: #212529;
+    border-color: var(--app-action, #2f3b4c);
 }
 
 .dt-nav-btn:disabled {
@@ -77,8 +78,8 @@
 .dt-page-pill {
     border-radius: 2rem;
     padding: 0.3rem 0.9rem;
-    background-color: #f8f9fb;
-    color: #495057;
+    background-color: var(--app-action-soft, rgba(47, 59, 76, 0.08));
+    color: var(--app-action, #2f3b4c);
     font-size: 0.82rem;
     font-weight: 600;
 }

@@ -9,9 +9,16 @@ import (
 func SetupRoutes(r *gin.Engine) {
 	api := r.Group("/api")
 	{
+		// User routes
 		api.GET("/users", handlers.GetUsers)
 		api.POST("/users", handlers.CreateUser)
 		api.PUT("/users/:id", handlers.UpdateUser)
 		api.DELETE("/users/:id", handlers.DeleteUser)
+
+		// Produk routes
+		api.GET("/produk", handlers.GetProduk)
+		api.POST("/produk", handlers.CreateProduk)
+		api.PUT("/produk/:id", handlers.UpdateProduk)
+		api.DELETE("/produk/:id", handlers.DeleteProduk)
 	}
 }

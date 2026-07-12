@@ -10,6 +10,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import "./styles/sidebar.css";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

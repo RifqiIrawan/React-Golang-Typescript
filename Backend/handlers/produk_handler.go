@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func GetUsers(c *gin.Context) {
+func GetProduk(c *gin.Context) {
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil || page < 1 {
 		page = 1
@@ -28,10 +28,10 @@ func GetUsers(c *gin.Context) {
 	status := c.Query("status")
 
 	buildQuery := func() *gorm.DB {
-		q := config.DB.Model(&models.User{})
+		q := config.DB.Model(&models.Produk{})
 		if search != "" {
 			like := "%" + search + "%"
-			q = q.Where("nama ILIKE ? OR email ILIKE ?", like, like)
+			q = q.Where("nama ILIKE ? OR deskripsi ILIKE ?", like, like)
 		}
 		if role != "" {
 			q = q.Where("role = ?", role)
@@ -48,9 +48,9 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
-	var users []models.User
+	var produk []models.Produk
 	offset := (page - 1) * limit
-	if err := buildQuery().Order("id asc").Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+	if err := buildQuery().Order("id asc").Offset(offset).Limit(limit).Find(&produk).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -61,7 +61,7 @@ func GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": users,
+		"data": produk,
 		"meta": gin.H{
 			"page":       page,
 			"limit":      limit,
@@ -71,8 +71,8 @@ func GetUsers(c *gin.Context) {
 	})
 }
 
-func CreateUser(c *gin.Context) {
-	var input models.User
+func CreateProduk(c *gin.Context) {
+	var input models.Produk
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -90,53 +90,53 @@ func CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, input)
 }
 
-func UpdateUser(c *gin.Context) {
+func UpdateProduk(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id tidak valid"})
 		return
 	}
 
-	var user models.User
-	if err := config.DB.First(&user, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "user tidak ditemukan"})
+	var produk models.Produk
+	if err := config.DB.First(&produk, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "produk tidak ditemukan"})
 		return
 	}
 
-	var input models.User
+	var input models.Produk
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user.Nama = input.Nama
-	user.Email = input.Email
-	user.Role = input.Role
-	user.Status = input.Status
+	produk.Nama = input.Nama
+	produk.Deskripsi = input.Deskripsi
+	produk.Harga = input.Harga
+	produk.Stok = input.Stok
 
-	if err := config.DB.Save(&user).Error; err != nil {
+	if err := config.DB.Save(&produk).Error; err != nil {
 		if strings.Contains(err.Error(), "duplicate key") {
-			c.JSON(http.StatusConflict, gin.H{"error": "Email sudah digunakan"})
+			c.JSON(http.StatusConflict, gin.H{"error": "Produk sudah digunakan"})
 			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, produk)
 }
 
-func DeleteUser(c *gin.Context) {
+func DeleteProduk(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id tidak valid"})
 		return
 	}
 
-	if err := config.DB.Delete(&models.User{}, id).Error; err != nil {
+	if err := config.DB.Delete(&models.Produk{}, id).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "user berhasil dihapus"})
+	c.JSON(http.StatusOK, gin.H{"message": "produk berhasil dihapus"})
 }

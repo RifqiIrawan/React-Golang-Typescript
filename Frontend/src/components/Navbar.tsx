@@ -6,11 +6,11 @@ export default function Navbar() {
     >
       <div className="container-fluid">
 
-        <span
-          className="navbar-brand fw-bold fs-4"
+        {/* <span
+          className="navbar-brand fw-bold fs-3"
         >
-          React ERP
-        </span>
+          React JS
+        </span> */}
 
         <div className="dropdown ms-auto">
 

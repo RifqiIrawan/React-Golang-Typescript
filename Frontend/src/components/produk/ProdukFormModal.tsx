@@ -1,46 +1,46 @@
 import { useState, useEffect } from "react";
 import { Modal, Form, Button, Alert } from "react-bootstrap";
-import type { User } from "../../types/user";
+import type { Produk } from "../../types/produk";
 
 type Props = {
     show: boolean;
     onHide: () => void;
-    onSubmit: (data: Omit<User, "id">) => void;
-    initialData?: User | null;
+    onSubmit: (data: Omit<Produk, "id">) => void;
+    initialData?: Produk | null;
     error?: string | null;
     submitting?: boolean;
 };
 
-export default function UserFormModal({ show, onHide, onSubmit, initialData, error, submitting = false }: Props) {
+export default function ProdukFormModal({ show, onHide, onSubmit, initialData, error, submitting = false }: Props) {
     const [nama, setNama] = useState("");
-    const [email, setEmail] = useState("");
-    const [role, setRole] = useState("User");
-    const [status, setStatus] = useState("Aktif");
+    const [deskripsi, setDeskripsi] = useState("");
+    const [harga, setHarga] = useState("0");
+    const [stock, setStock] = useState("0");
 
     useEffect(() => {
         if (initialData) {
             setNama(initialData.nama);
-            setEmail(initialData.email);
-            setRole(initialData.role);
-            setStatus(initialData.status);
+            setDeskripsi(initialData.deskripsi);
+            setHarga(initialData.harga.toString());
+            setStock(initialData.stock.toString());
         } else {
             setNama("");
-            setEmail("");
-            setRole("User");
-            setStatus("Aktif");
+            setDeskripsi("");
+            setHarga("");
+            setStock("");
         }
     }, [initialData, show]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ nama: nama.trim(), email: email.trim(), role, status });
+        onSubmit({ nama: nama.trim(), deskripsi: deskripsi.trim(), harga: parseFloat(harga), stock: parseInt(stock) });
     };
 
     return (
         <Modal show={show} onHide={submitting ? undefined : onHide} centered>
             <Form onSubmit={handleSubmit}>
                 <Modal.Header closeButton={!submitting}>
-                    <Modal.Title>{initialData ? "Edit User" : "Tambah User"}</Modal.Title>
+                    <Modal.Title>{initialData ? "Edit Produk" : "Tambah Produk"}</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -62,31 +62,38 @@ export default function UserFormModal({ show, onHide, onSubmit, initialData, err
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
+                        <Form.Label>Deskripsi</Form.Label>
                         <Form.Control
-                            type="email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
+                            type="text"
+                            value={deskripsi}
+                            onChange={e => setDeskripsi(e.target.value)}
                             required
                             disabled={submitting}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Role</Form.Label>
-                        <Form.Select value={role} onChange={e => setRole(e.target.value)} disabled={submitting}>
-                            <option value="Administrator">Administrator</option>
-                            <option value="User">User</option>
-                        </Form.Select>
+                        <Form.Label>Harga</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={harga}
+                            onChange={e => setHarga(e.target.value)}
+                            required
+                            disabled={submitting}
+                        />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Status</Form.Label>
-                        <Form.Select value={status} onChange={e => setStatus(e.target.value)} disabled={submitting}>
-                            <option value="Aktif">Aktif</option>
-                            <option value="Nonaktif">Nonaktif</option>
-                        </Form.Select>
+                        <Form.Label>Stock</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={stock}
+                            onChange={e => setStock(e.target.value)}
+                            required
+                            disabled={submitting}
+                        />
                     </Form.Group>
+
                 </Modal.Body>
 
                 <Modal.Footer>
